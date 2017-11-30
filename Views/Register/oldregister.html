@@ -1,5 +1,4 @@
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
   <html>
     <head>
       <!--Import Google Icon Font-->
@@ -22,17 +21,24 @@
                 </div>
             </nav>
         </header>
-        <h1 class="purple-text"> Login Page</h1>
+        <h1 class="purple-text">Inscription</h1>
         <form action='#' method="post">
-        <input id="email" type="email" class="validate">
+        <label for="user_name">UserName</label>
+        <input placeholder="UserName" id="user_name" type="text" class="validate">
         <label for="email">Email</label>
+        <input placeholder="Email"id="email" type="email" class="validate">
+        <label for="password">Password</label>
         <input id="password" type="password" class="validate">
-        <label for="password">Password</label><br/>
+        <label for="password_confirm">Password confirmation</label>
+        <input id="password_confirm" type="password" class="validate">
         <input type="submit" value="Envoyer" />
+
+        
+        </form>
+        
 
       <!--Import jQuery before materialize.js-->
       <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     </body>
   </html>
-        
