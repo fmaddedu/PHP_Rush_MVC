@@ -1,16 +1,20 @@
-<?php
+<?php 
 include_once(dirname(__FILE__).'/../Models/Article.php');
 
 class articlesController
 {
+	private static $instance = null;
 	protected $db;
 	protected $blog;
- 
-	public function __construct()
+
+	public static function getInstance()
 	{
-		$this->db = DB;
-		$this->blog = new articleManager();
+		if(!self::$instance)
+			self::$instance = new articleManager();
+		return self::$instance;
 	}
+
+	private function __clone(){}
 
 	public function secure_input($data)
 	{
@@ -65,6 +69,8 @@ class articlesController
 			return -1;
 	}
 }
+
+$articleC = articlesController::getInstance();
 
 //include_once '../../Views/blogList/articles.php';
 ?>

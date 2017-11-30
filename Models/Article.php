@@ -1,19 +1,20 @@
 <?php
 include_once(dirname(__FILE__).'/../Config/db.php');
+include_once(dirname(__FILE__).'User.php');
+include_once(dirname(__FILE__).'Category.php');
 
 class articleManager
 {
-	private $db;
- 
-	public function __construct()
+	private static $instance = null;
+
+	public static function getInstance()
 	{
-		$this->db = DB;
+		if(!self::$instance)
+			self::$instance = new articleManager();
+		return self::$instance;
 	}
 
-	public function get_db()
-	{
-		return $this->db;
-	}
+	private function __clone(){}
 
 	public function get_articles()
 	{
@@ -21,49 +22,52 @@ class articleManager
 		$dbConnect->sql_query($query);
 	}
 
-	public function get_article($id)
+	public function get_article_by_id($id)
 	{
-		$query = 'SELECT * FROM articles WHERE id = :id');
+		$query = 'SELECT * FROM articles WHERE id = :id';
 		$variable = array('id' => $id);
 		$db_connect->sql_query($query, $variable);
-	} 
-
-/*
-	// categoryName to categoryId
-	public static function categoryName($categoryId)
-	{
-		$bdd = connect_db("127.0.0.1", "root", "root", 3306, "pool_php_rush");
-		$request = $bdd->prepare("SELECT name FROM categories WHERE id = ?");
-		$request->execute(array($categoryId));
-		$result = $request->fetch();
-		echo "<br>";
-        $request->closeCursor();
-		return $result[0];
 	}
-*/
 
-	public function post_article($title, $content, $creator, $category)
+	public function get_article_by_title($title)
+	{
+		$query = 'SELECT * FROM articles WHERE title = :title';
+		$variable = array('title' => $title);
+		$db_connect->sql_query($query, $variable);
+	}
+
+	public function post_article($title, $content, $creatorUsername, $categoryName)
 	{
 		$query = 'INSERT INTO articles (title, content, creator, category, creation_date, edition_date) VALUES (:title, :content, :creator, :category, :creation_date, :edition_date)';
+		//$userM = userManager::getInstance();
+		$creator = $userM->get_user_by_username($creatorUsername);
+		//$categoryM = categoryManager::getInstance();
+		$category = $categoryM->get_category_by_name($categoryName);
     $variable = array(
     	'title' => $title,
     	'content' => $content,
-    	'creator' => $creator,
-    	'category' => $category,
+    	'creator' => $creator['id'],
+    	'category' => $category['id'],
     	'creation_date' => date("Y-m-d H:i:s"),    	
     	'edition_date' => date("Y-m-d H:i:s")
         );	
   	$db_connect->sql_query($query, $variable);
 	}
 
-	public function edit_article($id, $title = null, $content = null, $creator = null, $category = null)
+	public function edit_article($id, $title = null, $content = null, $creatorUsername = null, $categoryName = null)
 	{
 		$query = 'UPDATE articles SET title = COALESCE(:title, title), content = COALESCE(:content, content), creator = COALESCE(:creator, creator), category = COALESCE(:category, category), edition_date = :edition_date WHERE id = :id';
+		//$userM = userManager::getInstance();
+		if ($creatorUsername != null)
+			$creator = $userM->get_user_by_username($creatorUsername);
+		//$categoryM = categoryManager::getInstance();
+		if ($categoryName != null)
+			$category = $categoryM->get_category_by_name($categoryName);
     $variable = array(
     	'title' => $title,
     	'content' => $content,
-    	'creator' => $creator,
-    	'category' => $category,
+    	'creator' => $creator['id'],
+    	'category' => $category['id'],
     	'edition_date' => date("Y-m-d H:i:s"),
     	'id' => $id
         );
@@ -77,5 +81,7 @@ class articleManager
    	$db_connect->sql_query($query, $variable);
 	}
 }
+
+$articleM = articleManager::getInstance();
 
 ?>

@@ -1,7 +1,5 @@
 <?php
-include_once (dirname(__FILE__).'configuration.php');
-
-// voir singleton
+include_once (dirname(__FILE__).'config.php');
 
 class ConnectDb
 {
@@ -41,9 +39,7 @@ class ConnectDb
 		return $this->connect;
 	}
 
-//magic method clone is empty to prevent duplication of connection
 	private function __clone(){}
-
 
 	public function sql_query($query, $variable = null)
 	{
@@ -65,6 +61,6 @@ class ConnectDb
 	}
 }
 
-$dbConnect = ConnectDb::getInstance();
-
+$connectDbInstance = ConnectDb::getInstance();
+$dbConnect = $connectDbInstance->getConnection();
 ?>
