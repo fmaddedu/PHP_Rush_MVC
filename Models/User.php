@@ -6,7 +6,7 @@ class userManager
 	private static $instance = null;
 
 	public static function getInstance()
-	{
+	{ 
 		if(!self::$instance)
 			self::$instance = new userManager();
 		return self::$instance;
@@ -31,6 +31,13 @@ class userManager
 	{
 		$query = 'SELECT * FROM users WHERE username = :username');
 		$variable = array('username' => $username);
+		$db_connect->sql_query($query, $variable);
+	} 
+
+	public function get_user_by_email($email)
+	{
+		$query = 'SELECT * FROM users WHERE email = :email');
+		$variable = array('email' => $email);
 		$db_connect->sql_query($query, $variable);
 	} 
 

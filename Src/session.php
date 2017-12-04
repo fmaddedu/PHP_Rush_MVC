@@ -38,6 +38,11 @@ class Session
 		
 	}
 
+	static function getAttribute()
+	{
+		
+	}
+
 }
 
 ?>

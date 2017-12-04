@@ -2,9 +2,16 @@
 
 class Form
 {
-	public function __construct($array = array(), $submit = "Submit", $action = NULL)
+	public function __construct($array = array(), $submit, $action = NULL)
 	{
 		echo '<form action="'.$action.'" method="post">';
+		
+		if (isset($_SESSION['message']))
+		{
+			echo $_SESSION['message'];
+			$_SESSION['message'] = "";
+		}
+		
 		foreach ($array as $key => $value)
 		{
 			if($key == "username")
@@ -19,9 +26,28 @@ class Form
 			{
 				echo '<label for='.$key.'> '.$value.': </label><input type="password" class="form" name='.$key.' id='.$key.' /></br>';	
 			}
+			else if($key == "title")
+			{
+				echo '<label for='.$key.'> '.$value.': </label><input type="text" class="form" name='.$key.' id='.$key.' /></br>';
+			}
+			else if($key == "content")
+			{
+				echo '<label for='.$key.'> '.$value.': </label><input type="text" class="form" name='.$key.' id='.$key.' /></br>';
+			}
+			else if($key == "category")
+			{
+				echo '<label for='.$key.'> '.$value.': </label><input type="text" class="form" name='.$key.' id='.$key.' /></br>';
+			}
 		}
 
-		echo '<div><button class="btn" type="submit">'.$submit.'</button></div></form>';
+		echo '<div><button class="btn" type="submit">'.$submit.'</button>';
+		
+		if ($submit = 'Login')
+			echo "<p>You don't have any account yet ? <a href='register.php'>Register</a></p>";
+		else if ($submit = 'Register')
+			echo "<p>You already have an account ?<a href='login.php'>Log in</a></p>";
+
+		echo '</div></form>';
 	}
 }
 

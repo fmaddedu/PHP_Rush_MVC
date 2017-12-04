@@ -2,32 +2,18 @@
 
 class Router
 {
-	private $url;
-	private $routes = [];
-
-	public function __construct($url)
+	public static function parse($url, $request)
 	{
-		$this->url = $url;
+		$url = trim($url);
+		$url = preg_replace('/[\-]+$/', '', $url);
+		$parts = explode('/', $url);
+		$pattern = explode('-', end($parts));
+		$request->controller = $pattern[0];
+		$request->action = $pattern[1];
+		$request->params = array_slice($pattern, 2);				
+		$request->date = date('Y-m-d G:i:s');
+		$request->base = basename(dirname(__FILE__));
 	}
-
-	public function get($path, $calable)
-	{
-		$route = new Route($path, $calable);
-		$this->routes['GET'][] = $route;
-	}
-
-	public function post($path, $calable)
-	{
-		$route = new Route($path, $calable);
-		$this->routes['POST'][] = $route;
-	}
-
-	public function run()
-	{
-		echo '<pre>';
-		echo print_r($this->routes);
-		echo '<pre>';
-	}
-
-
 }
+
+?>

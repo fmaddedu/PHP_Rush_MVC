@@ -1,11 +1,9 @@
 <?php
+//The router.php file retrieves information from the URL and parses it. The dispatcher.php file executes it, which means it will lead the user to the good controller, which include the good view.
 
-require dirname(__FILE__).'/../Src/Router.php');
-require dirname(__FILE__).'/../Src/Request.php');
-require dirname((__FILE__).'/Dispatcher.php');
-
-$dispatch = new Dispatcher();
-$dispatch->dispatch();
+require_once('Src/router.php');
+require_once('Src/session.php');
+require_once('Config/core.php');
 
 if($params[1] === '')
 {
@@ -39,6 +37,3 @@ if (!$found)
   header('HTTP/1.1 404 Not Found');
   //require_once('../Controllers/404Controller.php');
 }
-
-
-?>
