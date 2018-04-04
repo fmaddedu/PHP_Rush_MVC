@@ -4,45 +4,39 @@ include_once (dirname(__FILE__).'config.php');
 class ConnectDb
 {
 	private $connect;
-	private static $instance = null;
+	private static $_instance = null;
 
 	private $host = HOST;
 	private $user = USERNAME;
 	private $pass = PASSWORD;
 	private $port = PORT;
-	private $db = DB;
+	private $dbname = DB;
 
-	private function __construct()
-	{
-		try 
-		{
-			$dsn = 'mysql:host=' . $host . ';port=' . $port . ';dbname=' . $db . ';charset=utf8';
-			$this->connect = new PDO($dsn, $user, $pass);
+	private function __construct() {
+		try {
+			$dsn = 'mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname . ';charset=utf8';
+			$this->connect = new PDO($dsn, $this->user, $this->pass);
 	  	echo "Connected to database.";
 		}
-		catch (PDOException $e) 
-		{
+		catch (PDOException $e) {
 	  	error_log($e->getMessage(), 3, ERROR_LOG_FILE);
 			echo "PDO ERROR: " . $e->getMessage() . " storage in " . ERROR_LOG_FILE . "\n";
 		}
 	}
 
-	public static function getInstance()
-	{
-		if(!self::$instance)
-			self::$instance = new ConnectDB();
-		return self::$instance;
+	public static function getInstance() {
+		if(is_null(self::$_instance))
+			self::$_instance = new ConnectDb();
+		return self::$_instance;
 	}
 
-	public function getConnection()
-	{
+	public function connect() {
 		return $this->connect;
 	}
 
 	private function __clone(){}
 
-	public function sql_query($query, $variable = null)
-	{
+	public function sql_query($query, $variable = null) {
 		$request = $this->connect->prepare($query);
     if ($variable != null)
     	$request->execute($variable);
@@ -50,8 +44,7 @@ class ConnectDb
     	$request->execute();    	
     if (!$request)
     	return -1;
-		else
-    {
+		else {
 			if ($request->fetchAll())
 				$result = $request->fetchAll();
     	$request->closeCursor();
@@ -61,6 +54,5 @@ class ConnectDb
 	}
 }
 
-$connectDbInstance = ConnectDb::getInstance();
-$dbConnect = $connectDbInstance->getConnection();
-?>
+$database = ConnectDb::getInstance();
+$db = $database->connect();
