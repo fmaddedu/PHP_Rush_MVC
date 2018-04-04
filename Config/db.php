@@ -1,7 +1,10 @@
 <?php
+
+// The db.php is where you have your Database class which is performing all operations with the database;
+
 include_once (dirname(__FILE__).'config.php');
 
-class ConnectDb
+class Database
 {
 	private $connect;
 	private static $_instance = null;
@@ -26,7 +29,7 @@ class ConnectDb
 
 	public static function getInstance() {
 		if(is_null(self::$_instance))
-			self::$_instance = new ConnectDb();
+			self::$_instance = new Database();
 		return self::$_instance;
 	}
 
@@ -35,24 +38,8 @@ class ConnectDb
 	}
 
 	private function __clone(){}
-
-	public function sql_query($query, $variable = null) {
-		$request = $this->connect->prepare($query);
-    if ($variable != null)
-    	$request->execute($variable);
-    else
-    	$request->execute();    	
-    if (!$request)
-    	return -1;
-		else {
-			if ($request->fetchAll())
-				$result = $request->fetchAll();
-    	$request->closeCursor();
-			if (isset($result))
-				return $result;	
-		}
-	}
+	
 }
 
-$database = ConnectDb::getInstance();
+$database = Database::getInstance();
 $db = $database->connect();

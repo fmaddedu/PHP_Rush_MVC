@@ -1,4 +1,7 @@
 <?php
+
+// The configuration.php contains all of your configurations concerning the project;
+
 define("HOST", "127.0.0.1");
 define("USERNAME", "root");
 define("PASSWORD", "root");
