@@ -6,11 +6,13 @@ Class Router
 {
 	public static function parse($url, $request)
 	{
+		// trim = strip "/" from beginning and end of string
 		$url = trim($url, "/");
+		// explode = separate around a delimiter and returns an array of strings
 		$params = explode("/", $url);
 		$request->setController($params[0]);
-		$request->setAction(isset($params[1]) ? $params[1]: "index");
+		$request->setAction(isset($params[1]) ? $params[1] : "index");
 		$request->setParams(array_slice($params, 2));
-		return(TRUE);
+		return TRUE;
 	}
 }

@@ -1,13 +1,22 @@
 <?php 
 
-include_once __DIR__.'../Config/db.php';
-include_once __DIR__.'/Form.php';
+include_once (__DIR__."/../Config/db.php");
+include_once (__DIR__."/Form.php");
 
 class User
 {
-/********************** CREATE REGISTERED USER **********************/
-	static function create()
+	protected static $instance;
+
+	static function getInstance($request = NULL)
 	{
+		if(!isset(self::$instance)) {
+			self::$instance = new self($request);
+		}
+		return(self::$instance);
+	}
+
+/********************** CREATE REGISTERED USER **********************/
+	static function create() {
 		$password = $_POST['password'];
 		$pwd_hashed = password_hash($password, PASSWORD_DEFAULT);
 		$verif_pwd = password_verify($password, $pwd_hashed);

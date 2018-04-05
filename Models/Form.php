@@ -1,9 +1,18 @@
 <?php 
 
-include_once __DIR__.'../Config/db.php';
-include_once __DIR__.'/User.php';
+include_once (__DIR__."/../Config/db.php");
+include_once (__DIR__."/User.php");
 
 class Form {
+	protected static $instance;
+	
+	static function getInstance($request = NULL)
+	{
+		if(!isset(self::$instance)) {
+			self::$instance = new self($request);
+		}
+		return(self::$instance);
+	}
 
 /********************* CHECK IF USERNAME IS VALID *********************/
 	static function username_valid() {

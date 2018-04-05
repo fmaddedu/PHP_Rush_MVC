@@ -1,6 +1,6 @@
 <?php
 
-Class Request
+class Request
 {
 	private $url;
 	private $controller;
@@ -8,7 +8,7 @@ Class Request
 	private $params;
 	
 	public function __construct() {
-		$this->url = isset($_GET["url"]) ? $_GET["url"] : "";
+		$this->url = $_SERVER["REQUEST_URI"];
 	}
 
 	public function setController($controller = NULL) {

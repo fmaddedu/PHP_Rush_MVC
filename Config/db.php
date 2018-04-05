@@ -2,7 +2,7 @@
 
 // The db.php is where you have your Database class which is performing all operations with the database;
 
-include_once (dirname(__FILE__).'config.php');
+include_once (__DIR__."/config.php");
 
 class Database
 {
@@ -40,6 +40,3 @@ class Database
 	private function __clone(){}
 	
 }
-
-$database = Database::getInstance();
-$db = $database->connect();
