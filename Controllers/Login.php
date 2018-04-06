@@ -1,15 +1,15 @@
 <?php 
 
-include_once (__DIR__."/appController.php");
+include_once (__DIR__."/Controller.php");
 include_once (__DIR__."/../Config/config.php");
 include_once (__DIR__."/../Config/db.php");
 include_once (__DIR__."/../Config/sessionStart.php");
 include_once (__DIR__."/../Models/Form.php");
 include_once (__DIR__."/../Models/User.php");
 
-echo "loginController";
+echo "loginController<br>";
 
-class LoginController extends appController
+class Login extends Controller
 {
 	protected $request;
 	protected $message;
@@ -91,32 +91,50 @@ class LoginController extends appController
 			}
 			elseif (empty($_POST)) {
 				$_SESSION['message'] = "<p class='error'>Veuillez compléter le formulaire</p>";
+				// header("Location: ../index.php?route=login");
 				$this->render("Users/login");
 			}
 	}
 
-	public function logout()
-	{
-		session_unset();
+	public function register() {
+		// echo "register";
+		$this->render("Users/register");
+
+			/************** GO TO INDEX IF EVERYTHING IS OK **************/
+		if (!empty($_POST) && Form::valid_register_form() == "") {
+			User::create();
+			$_SESSION['message'] = "<p class='success'>Compte créé avec succès</p><br>";
+			if (!$_SESSION['admin']) {
+				$_SESSION['username'] = $_POST['username'];
+				$_SESSION['email'] = $_POST['email'];
+				header("Location: ../index.php");
+			}
+			else
+		/************* WHEN ADMIN CREATES AN ACCOUNT *************/
+				header("Location: ../views/adminUsers.php");			
+		}
+
+		/************ STAY IN REGISTER PAGE IF ERRORS ************/
+		elseif (!empty($_POST) && Form::valid_register_form() != "") {
+			$message_error = Form::valid_register_form();
+			$_SESSION['message'] = "<p class='error'>$message_error</p>";
+			if (!$_SESSION['admin'])
+				header("Location: ../views/register.php");
+			else
+		/************* WHEN ADMIN CREATES AN ACCOUNT *************/
+				header("Location: ../views/adminUsers.php");			
+		}
+	}
+
+	public function logout() {
+		
 		session_destroy();
-		session_reset();
-		session_start();
-		header("Location: ../../PHP_Rush_MVC");
-	}
-	private function Register_Form()
-	{
-		$form = array();
-		$form["username"] = "Nom";
-		
-		$form["password"] = "Password";
-				
-		$this->form = FormGenerator::form($form, "Login");
-		
-		$this->render("login");
-	}
-	public function getForm()
-	{
-		return($this->form);
+
+		if (isset($_COOKIE))
+			setcookie($_COOKIE, NULL, -1);
+
+		header("Location: ../index.php");
+
 	}
 }
 

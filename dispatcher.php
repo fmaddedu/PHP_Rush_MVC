@@ -6,37 +6,48 @@
 
 class Dispatcher 
 {
-  private $request;
-  private $controller;
-	
-	public function dispatch()
+  private $request;			// contains url -> controller/action/params 
+  private $controller;	// instance of controller
+
+	public function __construct()
 	{
-		$this->request = new Request();
-		Router::parse($this->request->getURL(), $this->request);
-		// echo("<main>");
+		// echo "dispatcher<br>";
+		$this->request = new Router();
+		$this->request->parse();
+		echo "\$this->request->getURL() : ";
+		var_dump($this->request->getURL());
+		echo "<br>";
+		echo "\$this->request->getController() : ";
+		var_dump($this->request->getController());
+		echo "<br>";
+		echo "\$this->request->getAction() : ";
+		var_dump($this->request->getAction());
+		echo "<br>";
+		echo "<br>";
 		$this->controller = $this->load_Controller();
-		call_user_func_array(array($this->controller,$this->request->getAction()), $this->request->getParams());
-		// echo("</main>");
+		var_dump($this->controller);
+		echo "<br>";
+		if (is_callable(array($this->controller, $this->request->getAction())))
+			call_user_func_array([$this->controller, $this->request->getAction()], $this->request->getParams()); 	// call_user_func_array(array('ClassName', 'method'), $args)
 	}
 
 	private function load_Controller()
 	{
 		if(!isset($_SESSION["user"]))
 		{
-			$name = "loginController";
-			$file = ROOT."Controllers/".$name.".php";
+			$name = "login";
+			$file = ROOT."Controllers/".ucfirst($name).".php";
 		}
 		else if($this->request->getController() != "")
 		{
-			$name = $this->request->getController()."Controller";
-			$file = ROOT."Controllers/".$name.".php";
+			$name = $this->request->getController();
+			$file = ROOT."Controllers/".ucfirst($name).".php";
 		}
 		if(file_exists($file))
 		{
 			include_once $file;
 			if(method_exists($name, $this->request->getAction())) {
-				return($name::getInstance());
-				// return($name::getInstance($this->request));
+				return(ucfirst($name)::getInstance($this->request));
 			}	
 			else
 			{
@@ -44,7 +55,6 @@ class Dispatcher
 				include_once('Views/my_404.php'); 
 				die();
 	      // header('HTTP/1.0 404 Not Found');
-	      // exit;				
 			}
 		}
 		else
@@ -53,7 +63,6 @@ class Dispatcher
 			include_once('Views/my_404.php'); 
 			die();
       // header('HTTP/1.0 404 Not Found');
-      // exit;				}
 		}
 	}
 }

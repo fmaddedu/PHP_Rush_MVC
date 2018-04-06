@@ -3,7 +3,7 @@
 	
 	<body>
 		
-		<form method="POST" action="../../PHP_Rush_MVC/Controllers/loginController.php">
+		<form method="POST" action="../../PHP_Rush_MVC/login/index">
 
 		<h1>Se connecter</h1>
 		
@@ -20,7 +20,7 @@
 
 		<input type="submit" value="Se connecter">
 
-		<h2>Pas encore client ?<a href="register.php">S'inscrire</a></h2>
+		<h2>Pas encore client ?<a href="register">S'inscrire</a></h2>
 
 	</form>
 

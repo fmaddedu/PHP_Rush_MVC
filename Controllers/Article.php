@@ -1,5 +1,21 @@
 <?php
 
+include_once (__DIR__."/Controller.php");
+include_once (__DIR__."/../Config/config.php");
+include_once (__DIR__."/../Config/db.php");
+include_once (__DIR__."/../Config/sessionStart.php");
+include_once (__DIR__."/../Models/Form.php");
+include_once (__DIR__."/../Models/User.php");
+
+echo "Article controller";
+
+class Article extends Controller
+{
+	public function test() {
+		echo "test";
+	}
+}
+
 if (!$_SESSION['admin']) {
 	header("Location: ../index.php");
 }

@@ -1,6 +1,6 @@
 <?php 
 
-class appController
+class Controller
 {
 	protected $request;
 	protected $message;
@@ -17,7 +17,7 @@ class appController
 		if (!empty($view))
 			include_once(ROOT."Views/".$view.".php");
 		else
-			header("Location: ".ROOT."Views/".$request->getController()."/".$request->getAction().".php");			
+			include_once(ROOT."Views/".$request->getController()."/".$request->getAction().".php");			
 	}
 
 	//Loads the Database class so that it can be accessed in the controller by using $this->$model

@@ -1,11 +1,3 @@
-<?php 
-include_once '../config/dbPdo.php';
-include_once '../config/sessionStart.php';
-include_once '../models/Form.php';
-include_once '../models/User.php';
-include_once '../models/Product.php';
-?>
-
 <!DOCTYPE html>
 <html>
 
@@ -13,15 +5,8 @@ include_once '../models/Product.php';
 	
 	<body>
 
-		<form method="POST" action="../controllers/registerController.php">
-		
-		<?php 
-			if (!empty($_SESSION['message'])) {
-				echo $_SESSION['message'];
-				$_SESSION['message'] = "";
-			}
-		?>
-		
+		<form method="POST" action="../../PHP_Rush_MVC/login/register">
+			
 		<h1>S'inscrire</h1>
 		
 		<label for="username">Pseudo :</label>
